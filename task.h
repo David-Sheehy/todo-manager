@@ -1,13 +1,12 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include "subtask.h"
 #include <string>
 
 class Task {
     private:
         std::string title;
-        Subtask* items;
+        std::string* items;
         int priority;
         int n;
         int len;
@@ -35,11 +34,11 @@ class Task {
             items = new Subtask[l];
         }
         
-        void addSubtask(Subtask sb, int priority = 0);
-        void removeSubtask(int priority = 0);
+        void addItem(std::string sb, int priority = 0);
+        void removeItem(int priority = 0);
 
 
-        void setSubtask(Subtask sb, int n);
-        Subtask getSubtask(int n);
+        void setItem(std::string sb, int n);
+        std::string getItem(int n);
 };
 #endif

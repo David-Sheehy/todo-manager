@@ -1,6 +1,5 @@
 #include <string>
 #include "task.h"
-#include "subtask.h"
 //TODO Test the expand function
 //TODO Test the adding subtask function
 //TODO Implement and test the removeSubtask, setSubtask, and getSubtask
@@ -15,7 +14,7 @@
  */
 void expand() {
     len = 2 * len;
-    Subtask* temp = new Subtask[len];
+    std::string* temp = new std::string[len];
     
     for(int i = 0; i < len/2; ++i) {
         temp[i] = items[i];
@@ -31,7 +30,7 @@ void expand() {
  * Parameters:
  *      sb - The Subtask being added.
  */
-void Task::addSubtask(Subtask sb) {
+void Task::addItem(std::string sb) {
     if(len <= n) {
         expand();
     } 
@@ -49,12 +48,11 @@ void Task::addSubtask(Subtask sb) {
  * description: Removes a subtask with a given priority and updates all the
  *              tasks below it to have a higher priority.
  */
-void Task::removeSubtask(int priority) {
-
+void Task::removeItem(int priority) {
 };
 
-void Task::setSubtask(Subtask sb, int n) {
+void Task::setItem(std::string sb, int n) {
 };
 
-Subtask Task::getSubtask(int n) {
+std::string Task::getItem(int n) {
 };
