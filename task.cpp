@@ -14,6 +14,7 @@
  *      o
  */
 Task::Task(const Task& o) {
+    this->title = o.title;
     this->n = o.n;
     this->len = o.len;
     this->items = new std::string[len];
@@ -31,6 +32,7 @@ Task::Task(const Task& o) {
 Task& Task::operator=(const Task& o) {
     if(this != &o) {
         delete [] this->items;
+        this->title = o.title;
         this->n = o.n;
         this->len = o.len;
         this->items = new std::string[len];
@@ -84,16 +86,18 @@ void Task::addItem(std::string sb) {
  *      priority - The index of the subtask being moved.
  * return: None
  */
-void Task::removeItem(int priority) {
+bool Task::removeItem(int priority) {
+    bool result = true;
     if( n <= priority || priority < 0) {
         // do nothing
-        return;
+        return result;
     }
 
     for(int i = priority; i < n-1; ++i) {
         this->items[i] = this->items[i+1];
     }
     n--;
+    return result;
 };
 
 

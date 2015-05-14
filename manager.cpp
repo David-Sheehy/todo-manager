@@ -40,13 +40,14 @@ void Manager::addTask(Task t) {
  * class: Manager
  * parameters:
  *      ndx - The ndx of the task being retrieved.
- * return: The task held at ndx or an empty task if that task does not exist.
+ * return: A copy of the task held at ndx or an empty task if that task does
+ *         not exist.
  */
 Task Manager::getTask(int ndx) {
     if(ndx < 0 || n < ndx) {
         return Task();
     }
-    return tasks[n];
+    return tasks[ndx];
 }
 
 /*
@@ -67,10 +68,11 @@ void Manager::setTask(Task t, int ndx) {
 /*
  * promote
  * class: Manager
+ * description: Moves a task up the list.
  * paramaters:
  *      ndx: The ndx of the task being promoted in priority
- *      spot: the ndx of the spot it's being promoted it.
- * description: 
+ *      number: Number of spots it's being moved up.
+ * return: None.
  */
 void Manager::promote(int ndx, int number) {
     if(ndx < 0 || n < ndx || number < 1 || (ndx-number) < 0 ){
@@ -87,5 +89,50 @@ void Manager::promote(int ndx, int number) {
 
 }
 
+/*
+ * demote
+ * class: Manager
+ * description: Move a task a number of spots down the list.
+ * parameters:
+ *      ndx: The index of the task being demoted.
+ *      number: The number of spots it's moving down.
+ * return: None.
+ */
 void Manager::demote(int ndx, int number) {
+    // needs to be implemented :c
+   if(ndx < 0 || n < ndx || number < 1 || n < (number +ndx)) {
+       // do nothing
+       return;
+   }
+   Task temp = getTask(ndx+number);
+   setTask(getTask(ndx),ndx+number);
+   for(int i = ndx+number-1; ndx <= i; --i) {
+       Task t = getTask(i);
+       setTask(temp,i);
+       temp = t;
+   }
+}
+
+
+/*
+ * removeItem
+ * class: Manager
+ * description: Removes a given item from a given task. The items in the task
+ *              below it are promoted. This will fail if the manager does not
+ *              contain a given task, or if that task does not contain a given
+ *              item.
+ * paramaters:
+ *          task: The index of the task being removed.
+ *          item: The index of the item being removed.
+ * return: whether the removal was successful.
+ */
+bool Manager::removeItem(int task, int item) {
+    bool result = true;;
+    if(task < this->getNumberOfTasks()) {
+        result = this->tasks[task].removeItem(item);
+    }
+    else {
+        result = false;
+    }
+    return result;
 }

@@ -16,7 +16,6 @@ class Manager {
     public:
 
         ~Manager() {
-            std::cout << "CLEARING MANAGER." << std::endl;
             delete  [] tasks;
             tasks = NULL;
         }
@@ -38,5 +37,11 @@ class Manager {
 
         void promote(int ndx, int number=1);
         void demote(int ndx, int number=1);
+
+        // specific task modifying functions
+        // These  modify a specified task stored by the manager.
+        bool removeItem(int task, int item);
+        bool setItem(int task, int item, std::string s);
+        bool addItem(int task, std::string item);
 };
 #endif

@@ -15,7 +15,6 @@ class Task {
     public:
 
         ~Task() {
-            std::cout << "KILL TASK " << std::endl;
             delete [] items;
         }
 
@@ -49,9 +48,12 @@ class Task {
          */
         Task& operator=(const Task& o);
 
-        void addItem(std::string sb);
-        void removeItem(int priority = 0);
+        int getNumberOfItems() {
+            return n;
+        }
 
+        void addItem(std::string sb);
+        bool removeItem(int priority = 0);
 
         void setItem(std::string sb, int n);
         std::string getItem(int n);
@@ -63,6 +65,5 @@ class Task {
         std::string getTitle() {
             return title;
         }
-
 };
 #endif
