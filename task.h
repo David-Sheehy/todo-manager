@@ -55,7 +55,7 @@ class Task {
         void addItem(std::string sb);
         bool removeItem(int priority = 0);
 
-        void setItem(std::string sb, int n);
+        bool setItem(int n, std::string sb);
         std::string getItem(int n);
 
         void setTitle(std::string s) {

@@ -43,5 +43,8 @@ class Manager {
         bool removeItem(int task, int item);
         bool setItem(int task, int item, std::string s);
         bool addItem(int task, std::string item);
+
+
+        //friend ostream& operator<<(const Task&, ostream&);
 };
 #endif

@@ -84,7 +84,7 @@ void Task::addItem(std::string sb) {
  *              tasks below it to have a higher priority.
  * paramters:
  *      priority - The index of the subtask being moved.
- * return: None
+ * return: whether the item was removed.
  */
 bool Task::removeItem(int priority) {
     bool result = true;
@@ -108,14 +108,15 @@ bool Task::removeItem(int priority) {
  * Parameters:
  *      sb - The new contents for a subtask.
  *      n - The index of the subtask being modified.
- * return: none
+ * return: Whether the item was modified.
  */
-void Task::setItem(std::string sb, int ndx) {
+bool Task::setItem(int ndx, std::string sb) {
     if( n <= ndx || ndx < 0) {
         // do nothing
-        return;
+        return false;
     }
     this->items[ndx] = sb;
+    return true;
 };
 
 std::string Task::getItem(int ndx) {

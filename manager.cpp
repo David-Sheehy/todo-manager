@@ -136,3 +136,44 @@ bool Manager::removeItem(int task, int item) {
     }
     return result;
 }
+
+/*
+ * setItem
+ * class: Manager
+ * description: Modifies a given item held by a specific task.
+ * paramaters:
+ *      task - The index of the task being modified.
+ *      item - The index of the item being modified.
+ *      s - The new task message.
+ * return: Whether the task was successfully modified.
+ */
+bool Manager::setItem(int task, int item, std::string s) {
+    bool result = true;
+    if(task < this->getNumberOfTasks()) {
+        result = this->tasks[task].setItem(item,s);
+    }
+    else {
+        result = false;
+    }
+    return result;
+}
+
+/*
+ * addItem
+ * class: Manager
+ * description: Adds an item to a selected task.
+ * parameters:
+ *      task - The index of the task being added to.
+ *      item - The item being added.
+ * return: Whether the addition was successful.
+ */
+bool Manager::addItem(int task, std::string item) {
+    bool result = true;
+    if(task < this->getNumberOfTasks()) {
+        this->tasks[task].addItem(item);
+    }
+    else {
+        result = false;
+    }
+    return result;
+}
