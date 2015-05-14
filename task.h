@@ -23,18 +23,18 @@ class Task {
             items = NULL;
             priority = -1;
             n = 0;
-            l = 0;
+            len = 0;
         }
 
         Task(std::string title, int priority) {
             this->title = title;
             this->priority = priority;
             n = 0;
-            l = 8;
-            items = new Subtask[l];
+            len = 8;
+            items = new std::string[len];
         }
         
-        void addItem(std::string sb, int priority = 0);
+        void addItem(std::string sb);
         void removeItem(int priority = 0);
 
 

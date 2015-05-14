@@ -12,7 +12,7 @@
  * return - none
  * description: Doubles the capacity of the subtasks.
  */
-void expand() {
+void Task::expand() {
     len = 2 * len;
     std::string* temp = new std::string[len];
     
@@ -82,5 +82,5 @@ std::string Task::getItem(int ndx) {
     if(n <= ndx || ndx < 0) {
         return "";
     }
-    return this->itemx[ndx];
+    return this->items[ndx];
 };

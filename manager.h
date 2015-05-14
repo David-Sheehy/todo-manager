@@ -1,14 +1,17 @@
 #ifndef MANAGER_H
 #define MANAGER_H
-#include "task"
+#include <string>
+#include "task.h"
 
 class Manager {
     private:
         int l;
         int n;
+
+        std::string filename;
         Task* tasks;
 
-        void grow();
+        void expand();
     public:
 
         ~Manager() {
@@ -21,9 +24,16 @@ class Manager {
             tasks = new Task[l];
         }
 
-        void addTask(Task t);
+        int getNumberOfTasks() {
+            return this->n;
+        }
 
-        Task getTask(int n);
-        void removeTask(int n);
+        void addTask(Task t);
+        Task getTask(int ndx);
+        void setTask(Task t, int ndx);
+        void removeTask(int ndx);
+
+        void promote(int ndx, int number=1);
+        void demote(int ndx, int number=1);
 };
 #endif
