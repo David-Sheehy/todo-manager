@@ -1,5 +1,6 @@
 #include "task.h"
 #include "manager.h"
+#include <iostream>
 
 
 /*
@@ -43,7 +44,7 @@ void Manager::addTask(Task t) {
  * return: A copy of the task held at ndx or an empty task if that task does
  *         not exist.
  */
-Task Manager::getTask(int ndx) {
+Task Manager::getTask(int ndx) const {
     if(ndx < 0 || n < ndx) {
         return Task();
     }
@@ -66,6 +67,25 @@ void Manager::setTask(Task t, int ndx) {
 }
 
 /*
+ * swapTasks
+ * class: Manager
+ * description: Swap the priorities of two Tasks.
+ * parameters:
+ *      ndx1 - The index of the first Task;
+ *      ndx2 - The index of the second Task
+ *
+ */
+void Manager::swapTasks(int ndx1, int ndx2) {
+    if(ndx1 < 0 || ndx2 < 0 || n <= ndx1 || n <= ndx2 || ndx1 == ndx2) {
+        // do nothing
+        return;
+    }
+    Task temp = getTask(ndx1);
+    setTask(getTask(ndx2),ndx1);
+    setTask(temp,ndx2);
+};
+
+/*
  * promote
  * class: Manager
  * description: Moves a task up the list.
@@ -81,12 +101,12 @@ void Manager::promote(int ndx, int number) {
     }
     Task temp = getTask(ndx-number);
     setTask(getTask(ndx),ndx-number);
-    for(int i = ndx-number+1; i < ndx; ++i) {
+
+    for(int i = ndx-number+1; i <= ndx; ++i) {
         Task t = getTask(i);
         setTask(temp,i);
         temp = t;
     }
-
 }
 
 /*
@@ -100,17 +120,17 @@ void Manager::promote(int ndx, int number) {
  */
 void Manager::demote(int ndx, int number) {
     // needs to be implemented :c
-   if(ndx < 0 || n < ndx || number < 1 || n < (number +ndx)) {
-       // do nothing
-       return;
-   }
-   Task temp = getTask(ndx+number);
-   setTask(getTask(ndx),ndx+number);
-   for(int i = ndx+number-1; ndx <= i; --i) {
-       Task t = getTask(i);
-       setTask(temp,i);
-       temp = t;
-   }
+    if(ndx < 0 || n < ndx || number < 1 || n <= (number+ndx)) {
+        // do nothing
+        return;
+    }
+    Task temp = getTask(ndx+number);
+    setTask(getTask(ndx),number+ndx);
+    for(int i = ndx+number; ndx <= i; --i) {
+        Task t = getTask(i);
+        setTask(temp,i);
+        temp = t;
+    }
 }
 
 
@@ -176,4 +196,13 @@ bool Manager::addItem(int task, std::string item) {
         result = false;
     }
     return result;
+}
+
+/**
+ */
+std::ostream& operator<<(std::ostream& os ,const Manager& m) {
+    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
+        os << "(" <<i << ") " <<  m.getTask(i);
+    }
+    return os;
 }

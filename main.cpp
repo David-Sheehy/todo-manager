@@ -13,65 +13,92 @@ int main(int argc, char** argv) {
     Manager m;
     // handle the arguments
     Task temp("Finish this project.");
-    temp.addItem("Finish testing the task functionality.");                 // 0
-    temp.addItem("Create an operator<< for the task and manager classes."); // 1
-    temp.addItem("This item exists only for testing purposes.");            // 2
-    temp.addItem("Finish writing/testing the manager functions.");          // 3
-    temp.addItem("Decide on how I want to handle file input/output.");      // 4
-    temp.addItem("Another testing item. :3");                               // 5
-    temp.addItem("Design and create the interface.");                       // 6
-    
+    temp.addItem("test item 1.");
+    temp.addItem("yay ☺");
+    //cout << "Empty manager." << endl;
+    //cout << m << endl;
+
     //cout << "ADDING TASK" << endl;
     m.addTask(temp);
+    //cout << m << endl;
+
+    //cout << "ADDING TASK" << endl;
     m.addTask(Task("Anonymoust testing task ;3"));
+    //cout << m << endl;
+
+
+   // cout << "ADDING TASK" << endl;
     m.addTask(Task("Another testing task."));
+  //  cout << m << endl;
 
-    // print everything currently in the manager
-    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
-        Task t = m.getTask(i);
-        cout << t.getTitle() << endl;
-        for(int j = 0; j < t.getNumberOfItems(); ++j) {
-            cout << "\t " << j << " - " << t.getItem(j) << endl;
-        }
-    }
+    /*
 
-    // print everything currently in the manager
-    m.removeItem(0,2);
-    m.removeItem(1,2);
-    m.removeItem(0,4);
-    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
-        Task t = m.getTask(i);
-        cout << t.getTitle() << endl;
-        for(int j = 0; j < t.getNumberOfItems(); ++j) {
-            cout << "\t " << j << " - " << t.getItem(j) << endl;
-        }
-    }
+    // Test the swap task function
+    cout << "Swapping task 0 and task 2" << endl;
+    m.swapTasks(0,2);
+    cout << m << endl;
 
-    // test the manager.setItem functionality
-    string s = "This has been modified!.";
+    cout << "Swapping task 1 and task 2" << endl;
+    m.swapTasks(1,2);
+    cout << m << endl;
 
-    m.setItem(0,1,s);
-    m.setItem(0,2,s);
-    m.setItem(0,4,s);
-    m.setItem(1,4,s);
-    m.setItem(0,6,s);
-    m.setItem(1,0,s);
-    m.setItem(7,7,s);
-    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
-        Task t = m.getTask(i);
-        cout << t.getTitle() << endl;
-        for(int j = 0; j < t.getNumberOfItems(); ++j) {
-            cout << "\t " << j << " - " << t.getItem(j) << endl;
-        }
-    }
+    cout << "Swapping 0 and 2" << endl;
+    m.swapTasks(0,2);
+    cout << m << endl;
+    */
 
-    m.addItem(1,"This is a test item.");
-    m.addItem(1,"This is another test item.");
-    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
-        Task t = m.getTask(i);
-        cout << t.getTitle() << endl;
-        for(int j = 0; j < t.getNumberOfItems(); ++j) {
-            cout << "\t " << j << " - " << t.getItem(j) << endl;
-        }
-    }
+    // test the task promotion/demotion
+    cout << m << endl << endl;
+    cout << "Promoting task 2 by 2" << endl;
+    cout << "(" << m.getTask(2).getTitle() << ") to position 0" << endl;
+    m.promote(2,2);
+    cout << m;
+    cout << endl;
+
+    cout << "Promoting task 1 by 1" << endl;
+    cout << "(" << m.getTask(1).getTitle() << ") to position 0" << endl;
+    m.promote(1,1);
+    cout << m;
+    cout << endl;
+
+    // These should not change anything
+    m.promote(3,0);
+    m.promote(0,0);
+    m.promote(1,33);
+    m.promote(0,-1);
+    m.promote(-1,0);
+
+    /*
+    cout << "Demoting task 1 by 1" << endl;
+    cout << "(" << m.getTask(1).getTitle() << ") to position 2" << endl;
+    m.demote(1,1);
+    cout << m;
+    cout << endl;
+    */
+
+    cout << endl;
+    cout << "Adding some tasks." << endl;
+    m.addTask(Task("anony task"));
+    m.addTask(Task("kitties are cute task"));
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << m;
+    cout << "Demoting task 0 by 3" << endl;
+    cout << "(" << m.getTask(0).getTitle() << ") to position 3" << endl;
+    m.demote(0,3);
+    cout << m;
+    cout << endl;
+
+    /*
+    cout << endl;
+    cout << "Promoting task 3 by 3" << endl;
+    cout << "(" << m.getTask(3).getTitle() << ") to position 0" << endl;
+    m.promote(3,3);
+    cout << m;
+    cout << endl;
+    */
+
+
 }

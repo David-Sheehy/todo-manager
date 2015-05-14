@@ -1,9 +1,6 @@
 #include <string>
 #include "task.h"
-//TODO Test the expand function
-//TODO Test the adding subtask function
-//TODO test the removeSubtask, setSubtask, and getSubtask
-//     functions.
+//TODO finsih commenting
 
 
 /**
@@ -119,9 +116,26 @@ bool Task::setItem(int ndx, std::string sb) {
     return true;
 };
 
-std::string Task::getItem(int ndx) {
+std::string Task::getItem(int ndx) const {
     if(n <= ndx || ndx < 0) {
         return "";
     }
     return this->items[ndx];
 };
+
+/*
+ * operator<<
+ * class: Friend to Task
+ * description: Prings the task to an output stream.
+ * parameters:
+ *          os - The output stream
+ *          t - The task being printed.
+ * return: A reference to the output stream to allow for chaining.
+ */
+std::ostream& operator<<(std::ostream &os, const Task& t) {
+    os << t.getTitle() << std::endl;
+    for(int i = 0; i < t.getNumberOfItems(); ++i) {
+        os << "    " << i << " - " << t.getItem(i) << std::endl;
+    }
+    return os;
+}

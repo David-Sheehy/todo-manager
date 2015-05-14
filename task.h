@@ -48,7 +48,7 @@ class Task {
          */
         Task& operator=(const Task& o);
 
-        int getNumberOfItems() {
+        int getNumberOfItems() const{
             return n;
         }
 
@@ -56,14 +56,16 @@ class Task {
         bool removeItem(int priority = 0);
 
         bool setItem(int n, std::string sb);
-        std::string getItem(int n);
+        std::string getItem(int n) const;
 
         void setTitle(std::string s) {
             this->title = s;
         }
 
-        std::string getTitle() {
+        std::string getTitle() const {
             return title;
         }
+
+        friend std::ostream& operator<<(std::ostream&, const Task&);
 };
 #endif

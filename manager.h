@@ -26,25 +26,27 @@ class Manager {
             tasks = new Task[l];
         }
 
-        int getNumberOfTasks() {
+        int getNumberOfTasks() const {
             return this->n;
         }
 
+        // Task potioning.
         void addTask(Task t);
-        Task getTask(int ndx);
+        Task getTask(int ndx) const;
         void setTask(Task t, int ndx);
+        void swapTasks(int ndx1, int ndx2);
         void removeTask(int ndx);
 
         void promote(int ndx, int number=1);
         void demote(int ndx, int number=1);
 
-        // specific task modifying functions
+        // arbitrary task modifying functions
         // These  modify a specified task stored by the manager.
         bool removeItem(int task, int item);
         bool setItem(int task, int item, std::string s);
         bool addItem(int task, std::string item);
 
 
-        //friend ostream& operator<<(const Task&, ostream&);
+        friend std::ostream& operator<<(std::ostream&, const Manager&);
 };
 #endif
