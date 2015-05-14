@@ -1,5 +1,6 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 #include "manager.h"
 #include "task.h"
 
@@ -7,12 +8,13 @@ using namespace std;
 
 int main(int argc, char** argv) {
     bool customFile = false;;
-    char* customFileName = NULL;
+    string customFileName = "";
 
-    Manager manager();
+    Manager m;
     // handle the arguments
-    Task temp();
+    Task temp("Finish this project.");
+    
+    //cout << "ADDING TASK" << endl;
+    m.addTask(temp);
 
-    // clear memory
-    delete [] customFileName;
 }

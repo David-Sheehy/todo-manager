@@ -2,6 +2,7 @@
 #define MANAGER_H
 #include <string>
 #include "task.h"
+#include <iostream>
 
 class Manager {
     private:
@@ -15,7 +16,9 @@ class Manager {
     public:
 
         ~Manager() {
-            delete [] tasks;
+            std::cout << "CLEARING MANAGER." << std::endl;
+            delete  [] tasks;
+            tasks = NULL;
         }
 
         Manager() {
