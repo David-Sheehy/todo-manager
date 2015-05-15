@@ -5,6 +5,7 @@
 #include "task.h"
 
 using namespace std;
+enum command {AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
 
 /*
  * displayHelp
@@ -142,23 +143,28 @@ bool amendTaskPriority(Manager *m, int task, int mod);
  */
 bool amendTaskItemPriority(Manager *m, int task, int item, int mod);
 
+/*
+ * main
+ * class: None
+ */
 int main(int argc, char** argv) {
     // handle the arguments
     Manager m;
-
-    /*
     if(argc < 2) {
         displayHelp(cout);
-        return 1;
+        //return 1;
     }
     for(int i = 1; i < argc; ++i) {
         cout << argv[i] << endl;
     }
     listAllTasks(cout,m);
 
+    cout << LIST << endl;
+
+
+
     // Test the output operator for task
     return 0;
-    */
 }
 
 void displayHelp(ostream & os) {
