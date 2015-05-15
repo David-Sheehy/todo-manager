@@ -224,7 +224,7 @@ std::ostream& operator<<(std::ostream& os ,const Manager& m) {
  */
 void Manager::write(std::ostream &os) {
     // number of tasks
-    os << this->getNumberOfTasks() << ",";
+    os << this->getNumberOfTasks() << std::endl;
     for(int i = 0; i < this->getNumberOfTasks(); ++i) {
         this->getTask(i).write(os);
     }
@@ -241,7 +241,7 @@ void Manager::write(std::ostream &os) {
 void Manager::read(std::istream &is) {
     int number = -1;
     is >> number;
-    is.get();   // skip past the comma
+    is.get();   // to the next line
     for(int i = 0; i < number; ++i) {
         Task temp;
         temp.read(is);

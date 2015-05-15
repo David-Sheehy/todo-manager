@@ -1,6 +1,8 @@
 #include <string>
 #include <sstream>
 #include "task.h"
+
+const int LINE_SIZE = 256;
 //TODO finsih commenting
 
 
@@ -152,24 +154,10 @@ std::ostream& operator<<(std::ostream &os, const Task& t) {
  * return: none
  */
 void Task::write(std::ostream &os) const {
-    // The number of elements
-    os << this->getNumberOfItems() + 1 << ",";
-    // The title
-    os << this->getTitle() << ",";
-    // the tasks
+    os << this->getNumberOfItems()+1 << std::endl;
+    os << this->getTitle() << std::endl;
     for(int i = 0; i < this->getNumberOfItems(); ++i) {
-        for(int j = 0; j < this->items[i].length(); ++j) {
-            if(items[i][j] == ',') {
-                os << "\\,";
-            }
-            else if(items[i][j] == '\\') {
-                os << "\\\\";
-            }
-            else {
-                os << items[i][j];
-            }
-        }
-        os << ',';
+        os << this->items[i] << std::endl;
     }
 }
 
@@ -183,34 +171,13 @@ void Task::write(std::ostream &os) const {
  */
 void Task::read(std::istream &is) {
     int number = -1;
-    char c = is.peek();;
-    std::stringstream builder;
-
-    is >> number;   // The number of counters.
-    is.get();       // skip over the following comma
-    //  read in the title.
-    c = is.get();
-    while(c != ',') {
-        // if it's the escape character, get the next one no matter what.
-        if(c == '\\') {
-            c = is.get();
-        }
-        builder << c;
-        c = is.get();
+    char line[LINE_SIZE];
+    is >> number;
+    is.get();
+    is.getline(line,LINE_SIZE);
+    this->setTitle(line);
+    for(int i = 1; i < number; ++i) {
+        is.getline(line,LINE_SIZE);
+        this->addItem(line);
     }
-    this->setTitle(builder.str());
-    number--;   // decrement the counter.
-    for(int i = 0; i < number; ++i) {
-        builder.str("");
-        c = is.get();
-        while( c != ',') {
-            if(c == '\\') {
-                c = is.get();
-            }
-            builder << c;
-            c = is.get();
-        }
-        this->addItem(builder.str());
-    }
-
 }

@@ -143,9 +143,10 @@ bool amendTaskPriority(Manager *m, int task, int mod);
 bool amendTaskItemPriority(Manager *m, int task, int item, int mod);
 
 int main(int argc, char** argv) {
-    /*
     // handle the arguments
     Manager m;
+
+    /*
     if(argc < 2) {
         displayHelp(cout);
         return 1;
@@ -154,23 +155,10 @@ int main(int argc, char** argv) {
         cout << argv[i] << endl;
     }
     listAllTasks(cout,m);
-    */
 
     // Test the output operator for task
-    Manager m;
-    m.addTask(Task("Hello there task."));
-    m.addTask(Task("Second task time."));
-    m.addItem(1,"adding an item to the second task.");
-    m.addItem(1,"Adding another item to the second task.");
-    cout << m;
-    m.write(cout);
-    cout << endl;
-    cout << endl;
-    Manager m1;
-    m1.read(cin);
-    cout << m1;
-    cout << endl;
     return 0;
+    */
 }
 
 void displayHelp(ostream & os) {
