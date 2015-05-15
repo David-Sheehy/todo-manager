@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 /*
  * displayHelp
  * class: None
@@ -144,7 +143,9 @@ bool amendTaskPriority(Manager *m, int task, int mod);
 bool amendTaskItemPriority(Manager *m, int task, int item, int mod);
 
 int main(int argc, char** argv) {
+    /*
     // handle the arguments
+    Manager m;
     if(argc < 2) {
         displayHelp(cout);
         return 1;
@@ -152,10 +153,28 @@ int main(int argc, char** argv) {
     for(int i = 1; i < argc; ++i) {
         cout << argv[i] << endl;
     }
+    listAllTasks(cout,m);
+    */
+
+    // Test the input operator for task
+    cin >> m;
+
     return 0;
 }
 
 void displayHelp(ostream & os) {
-    os << "usage: todo-manager <command> [<args>] << endl;
+    os << "usage: todo-manager <command> [<args>]" << endl;
     os << "The commands are: " << endl;
+    os << "    amend [n <command> [<args>]]" << endl; 
+    os << "    help                   Display this message." << endl;
+    os << "    list [n][n m]          List all the tasks and their item, or  " << endl;
+    os << "                           a task or display a range of tasks." << endl;
+    os << "    remove [n]             Removes task n from the list."<< endl;
+    os << "    swap [n m]             swaps the priority of task n and task m." << endl;
+    os << "" << endl;
+    os << "type todo-manager help <command> for more infromation on that command. " << endl;
+}
+
+void listAllTasks(ostream &os, const Manager &m) {
+    os << m;
 }

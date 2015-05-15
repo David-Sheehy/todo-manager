@@ -126,16 +126,23 @@ std::string Task::getItem(int ndx) const {
 /*
  * operator<<
  * class: Friend to Task
- * description: Prings the task to an output stream.
+ * description: Prints the task to an output stream.
  * parameters:
- *          os - The output stream
- *          t - The task being printed.
+ *      os - The output stream
+ *      t - The task being printed.
  * return: A reference to the output stream to allow for chaining.
  */
 std::ostream& operator<<(std::ostream &os, const Task& t) {
-    os << t.getTitle() << std::endl;
-    for(int i = 0; i < t.getNumberOfItems(); ++i) {
-        os << "    " << i << " - " << t.getItem(i) << std::endl;
-    }
-    return os;
+}
+
+/*
+ * operator>>
+ * class; friend to Task
+ * description: Reads in a task from an input stream.
+ * parameters:
+ *      is - The input stream.
+ *      t - The task being read in.
+ * return: A reference to the input stream to allow for chaining.
+ */
+std::istream& operator>>(std::istream &is, Task &t) {
 }

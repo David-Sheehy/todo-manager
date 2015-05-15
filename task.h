@@ -67,5 +67,6 @@ class Task {
         }
 
         friend std::ostream& operator<<(std::ostream&, const Task&);
+        friend std::istream& operator>>(std::istream&, Task&);
 };
 #endif

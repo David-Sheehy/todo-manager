@@ -48,5 +48,6 @@ class Manager {
 
 
         friend std::ostream& operator<<(std::ostream&, const Manager&);
+        friend std::istream& operator<<(std::istream&, Manager&);
 };
 #endif

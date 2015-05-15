@@ -198,11 +198,26 @@ bool Manager::addItem(int task, std::string item) {
     return result;
 }
 
-/**
+/*
+ * operator<<
+ * class: friend to Manager
+ * description: Write a manager to an output stream.
+ * parameters:
+ *      os - The output file stream.
+ *      m  - The todo list manager.
+ * return: A reference to the output stream to allow for chaining.
  */
 std::ostream& operator<<(std::ostream& os ,const Manager& m) {
-    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
-        os << "(" <<i << ") " <<  m.getTask(i);
-    }
-    return os;
+}
+
+/*
+ * operator>>
+ * class: friend to Manager
+ * description: Read in a manager from an input stream.
+ * parameters:
+ *      is - The input stream.
+ *      m - The todo list manager.
+ * return: A reference to the input stream to allow for chaining.
+ */
+std::istream& operator>>(std::istream &is, Manager& m) {
 }
