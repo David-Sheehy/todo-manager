@@ -201,23 +201,50 @@ bool Manager::addItem(int task, std::string item) {
 /*
  * operator<<
  * class: friend to Manager
- * description: Write a manager to an output stream.
+ * description: Writes a human readable manager to an output stream.
  * parameters:
- *      os - The output file stream.
+ *      os - The output stream being written to.
  *      m  - The todo list manager.
  * return: A reference to the output stream to allow for chaining.
  */
 std::ostream& operator<<(std::ostream& os ,const Manager& m) {
+    for(int i = 0; i < m.getNumberOfTasks(); ++i) {
+        os << "(" << i << ") " << m.getTask(i) << std::endl;
+    }
+    return os;
 }
 
 /*
- * operator>>
- * class: friend to Manager
- * description: Read in a manager from an input stream.
+ * write
+ * class: Manager
+ * description: Writes a comma separated value representation of the todo list.
  * parameters:
- *      is - The input stream.
- *      m - The todo list manager.
- * return: A reference to the input stream to allow for chaining.
+ *      os - The output stream being written to.
+ * return: None
  */
-std::istream& operator>>(std::istream &is, Manager& m) {
+void Manager::write(std::ostream &os) {
+    // number of tasks
+    os << this->getNumberOfTasks() << ",";
+    for(int i = 0; i < this->getNumberOfTasks(); ++i) {
+        this->getTask(i).write(os);
+    }
+}
+
+/*
+ * read
+ * class: Manager
+ * description: Reads in the manager from a comma separated value.
+ * paramaters:
+ *      is - The input stream being read from.
+ * return: None.
+ */
+void Manager::read(std::istream &is) {
+    int number = -1;
+    is >> number;
+    is.get();   // skip past the comma
+    for(int i = 0; i < number; ++i) {
+        Task temp;
+        temp.read(is);
+        this->addTask(temp);
+    }
 }

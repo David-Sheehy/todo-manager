@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 #include "task.h"
 //TODO finsih commenting
 
@@ -126,23 +127,90 @@ std::string Task::getItem(int ndx) const {
 /*
  * operator<<
  * class: Friend to Task
- * description: Prints the task to an output stream.
+ * description: Prints a human readable representation of the  task to an
+ *              output stream.
  * parameters:
  *      os - The output stream
  *      t - The task being printed.
  * return: A reference to the output stream to allow for chaining.
  */
 std::ostream& operator<<(std::ostream &os, const Task& t) {
+    os << t.getTitle() << std::endl;
+    for(int i = 0; i < t.getNumberOfItems(); ++i) {
+        os << "\t" << i << " - " << t.getItem(i) << std::endl;
+    }
+    return os;
 }
 
 /*
- * operator>>
- * class; friend to Task
- * description: Reads in a task from an input stream.
+ * write
+ * class: Task
+ * description: Prints out a comma seperated representation of this task.
+ *              Commas in the title or in the task are escape charactered out.
  * parameters:
- *      is - The input stream.
- *      t - The task being read in.
- * return: A reference to the input stream to allow for chaining.
+ *      os - The output stream being written to.
+ * return: none
  */
-std::istream& operator>>(std::istream &is, Task &t) {
+void Task::write(std::ostream &os) const {
+    // The number of elements
+    os << this->getNumberOfItems() + 1 << ",";
+    // The title
+    os << this->getTitle() << ",";
+    // the tasks
+    for(int i = 0; i < this->getNumberOfItems(); ++i) {
+        for(int j = 0; j < this->items[i].length(); ++j) {
+            if(items[i][j] == ',') {
+                os << "\\,";
+            }
+            else if(items[i][j] == '\\') {
+                os << "\\\\";
+            }
+            else {
+                os << items[i][j];
+            }
+        }
+        os << ',';
+    }
+}
+
+/*
+ * read
+ * class: Task
+ * description: Reads in a task from the form of a comma seperated list.
+ * parameters:
+ *      is - The input stream being read from.
+ * return: none.
+ */
+void Task::read(std::istream &is) {
+    int number = -1;
+    char c = is.peek();;
+    std::stringstream builder;
+
+    is >> number;   // The number of counters.
+    is.get();       // skip over the following comma
+    //  read in the title.
+    c = is.get();
+    while(c != ',') {
+        // if it's the escape character, get the next one no matter what.
+        if(c == '\\') {
+            c = is.get();
+        }
+        builder << c;
+        c = is.get();
+    }
+    this->setTitle(builder.str());
+    number--;   // decrement the counter.
+    for(int i = 0; i < number; ++i) {
+        builder.str("");
+        c = is.get();
+        while( c != ',') {
+            if(c == '\\') {
+                c = is.get();
+            }
+            builder << c;
+            c = is.get();
+        }
+        this->addItem(builder.str());
+    }
+
 }

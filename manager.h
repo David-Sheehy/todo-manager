@@ -46,8 +46,8 @@ class Manager {
         bool setItem(int task, int item, std::string s);
         bool addItem(int task, std::string item);
 
-
+        void read(std::istream&);
+        void write(std::ostream&);
         friend std::ostream& operator<<(std::ostream&, const Manager&);
-        friend std::istream& operator<<(std::istream&, Manager&);
 };
 #endif
