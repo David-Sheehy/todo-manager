@@ -19,6 +19,9 @@ int main(int argc, char **argv) {
     bool invalidArgs = argc < 2;
     bool parsing = true;
     int command = -1;               // The switch code for command
+    int comInd = -1;                // The index of the command in argv
+    ifstream fin;                   // The input filestream
+    ofstream fout;                  // The output filestream.
 
     // scan the command line arguments
     for(int i = 1; i < argc && !invalidArgs && parsing; ++i) {
@@ -47,6 +50,7 @@ int main(int argc, char **argv) {
         else {
             // it's a command
             parsing = false;
+            comInd = i;
             if(s.compare("add") == 0) {
                 command = ADD;
             }
@@ -83,12 +87,28 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
+    fin.open(filename.c_str());
+    m.read(fin);
+    fin.close();
     // read in the file.
-    ifstream infile(filename);
     // do the command
     switch(command) {
         case ADD:
-            cout << "add task" << endl;
+            if(1 < (argc-comInd)) {
+                Task t;
+                t.setTitle(argv[comInd+1]);
+                for(int i = comInd+2; i < argc; ++i) {
+                    t.addItem(argv[i]);
+                }
+                m.addTask(t);
+                fout.open(filename.c_str());
+                m.write(fout);
+                fout.close();
+            }
+            else {
+                cout << "Invalid number of arguments." << endl;
+                exit(1);
+            }
             break;
         case AMEND:
             cout << "amend" << endl;
@@ -132,6 +152,7 @@ int main(int argc, char **argv) {
 void displayHelp(ostream & os) {
     os << "usage: todo-manager [-f <filename>] [<command> [<args>]]" << endl;
     os << "The commands are: " << endl;
+    os << "    add   [ <task. [<items>]]" << endl;
     os << "    amend [n <command> [<args>]]" << endl; 
     os << "    demote [n count]       Demotes the nth task count times." << endl;
     os << "    help                   Display this message." << endl;
