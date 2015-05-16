@@ -282,11 +282,10 @@ void displayHelp(ostream & os) {
     os << "    amend [n <command> [<args>]]" << endl; 
     os << "    demote [n count]       Demotes the nth task count times." << endl;
     os << "    help                   Display this message." << endl;
-    os << "    list [][n][n]          List all the tasks and their items, or  " << endl;
+    os << "    list [][n][n m]        List all the tasks and their items, or  " << endl;
     os << "                           a task or display a range of tasks." << endl;
     os << "    promote [n count]      Promotes the nth task count times." << endl;
     os << "    remove [n]             Removes task n from the list."<< endl;
     os << "    swap [n m]             swaps the priority of task n and task m." << endl;
     os << "" << endl;
-    os << "type todo-manager help <command> for more infromation on that command. " << endl;
 }
