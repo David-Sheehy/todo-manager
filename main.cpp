@@ -186,9 +186,30 @@ int main(int argc, char **argv) {
                 m.write(fout);
                 fout.close();
             }
+            else {
+                cout << "Non-numeric argument given." << endl;
+                exit(1);
+            }
             break;
         case SWAP:
-            cout << "Swap" << endl;
+            if(ac != 2) {
+                cout << "Wrong number of arguments given." << endl;
+                exit(1);
+            }
+
+            if(isNumeric(argv[comInd+1]) && isNumeric(argv[comInd+2])) {
+                x = atoi(argv[comInd+1]);
+                y = atoi(argv[comInd+2]);
+                m.swapTasks(x,y);
+                fout.open(filename.c_str());
+                m.write(fout);
+                fout.close();
+            }
+            else {
+                cout << "Non-numeric argument given." << endl;
+                exit(1);
+            }
+
             break;
         default:
             displayHelp(cout);
