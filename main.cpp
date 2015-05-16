@@ -2,12 +2,14 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <string.h>
 #include "manager.h"
 #include "task.h"
 
 using namespace std;
 enum command {ADD,AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
 void displayHelp(ostream& os);
+bool isNumeric(const char*);
 
 /*
  * main
@@ -20,6 +22,8 @@ int main(int argc, char **argv) {
     bool parsing = true;
     int command = -1;               // The switch code for command
     int comInd = -1;                // The index of the command in argv
+    int lc = -1;                    // number of arguments for a command
+    int x = -1, y = -1;             // Hold argument values.
     ifstream fin;                   // The input filestream
     ofstream fout;                  // The output filestream.
 
@@ -51,6 +55,7 @@ int main(int argc, char **argv) {
             // it's a command
             parsing = false;
             comInd = i;
+            lc = (argc - comInd - 1);
             if(s.compare("add") == 0) {
                 command = ADD;
             }
@@ -90,11 +95,12 @@ int main(int argc, char **argv) {
     fin.open(filename.c_str());
     m.read(fin);
     fin.close();
+
     // read in the file.
     // do the command
     switch(command) {
         case ADD:
-            if(1 < (argc-comInd)) {
+            if(0 < lc) {
                 Task t;
                 t.setTitle(argv[comInd+1]);
                 for(int i = comInd+2; i < argc; ++i) {
@@ -120,7 +126,50 @@ int main(int argc, char **argv) {
             cout << "help" << endl;
             break;
         case LIST:
-            cout << "list" << endl;
+            // there are several options for this.
+            // If there is no arguments past the command, it will list
+            // everything. If there is one it will only list that one. If there
+            // are two it will list an inclusive range.
+            switch(lc) {
+                case 0:
+                    cout << m;
+                    break;
+                case 1:
+                    if(isNumeric(argv[comInd+1])) {
+                        x = atoi(argv[comInd+1]);
+                        if(0 <= x && x < m.getNumberOfTasks()) {
+                            cout << "(" << x << ")" << m.getTask(x) << endl;
+                        }
+                        else {
+                            cout << "Error. Task does not exist." << endl;
+                            exit(1);
+                        }
+                    }
+                    else {
+                        cout << "Non numeric argument given for list." << endl;
+                        exit(1);
+                    }
+                    break;
+                case 2:
+                    if(isNumeric(argv[comInd+1]) && isNumeric(argv[comInd+2])){
+                        x = atoi(argv[comInd+1]);
+                        y = atoi(argv[comInd+2]);
+                        if(0 <= x && x < y) {
+                        for(int i = x; i <= y && i < m.getNumberOfTasks(); ++i) {
+                            cout << "(" << i << ")" << m.getTask(i) << endl;
+                        }
+                        }
+                    }
+                    else {
+                        cout << "Non numeric argument given for list." << endl;
+                        exit(1);
+                    }
+                    break;
+                default:
+                    displayHelp(cout);
+                    exit(1);
+                    break;
+            }
             break;
         case PROMOTE:
             cout << "promote" << endl;
@@ -141,6 +190,24 @@ int main(int argc, char **argv) {
 }
 
 /*
+ * isNumeric
+ * class: None
+ * description: Check if a given cstring contains only numeric characters.
+ * parameters:
+ *      s - The cstring being checked.
+ * return: Whether a cstring contains only numeric decimal characters.
+ */
+bool isNumeric(const char *s) {
+    int n = strlen(s);
+    for(int i = 0; i < n; ++i) {
+        if(s[i] < '0' || s[i] > '9') {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*
  * displayHelp
  * class: None
  * description: Display a brief message detailing the commands and how to use
@@ -156,7 +223,7 @@ void displayHelp(ostream & os) {
     os << "    amend [n <command> [<args>]]" << endl; 
     os << "    demote [n count]       Demotes the nth task count times." << endl;
     os << "    help                   Display this message." << endl;
-    os << "    list [n][n m]          List all the tasks and their item, or  " << endl;
+    os << "    list [][n][n]          List all the tasks and their items, or  " << endl;
     os << "                           a task or display a range of tasks." << endl;
     os << "    promote [n count]      Promotes the nth task count times." << endl;
     os << "    remove [n]             Removes task n from the list."<< endl;
