@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -5,7 +6,119 @@
 #include "task.h"
 
 using namespace std;
-enum command {AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
+enum command {ADD,AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
+void displayHelp(ostream& os);
+
+/*
+ * main
+ * class: None
+ */
+int main(int argc, char **argv) {
+    Manager m;
+    string filename = "~/todo.txt"; // default file
+    bool invalidArgs = argc < 2;
+    bool parsing = true;
+    int command = -1;               // The switch code for command
+
+    // scan the command line arguments
+    for(int i = 1; i < argc && !invalidArgs && parsing; ++i) {
+        string s = argv[i];
+        // determine what type of argument it is
+        if(s[0] == '-') {
+            // option
+            // check if it has the necessary arguments given
+            // set the associated flags
+            if(s.compare("-f") == 0 || s.compare("--file") == 0) {
+                // check if there is another argument, which should be the file
+                // name.
+                if(1 < (argc-i)) {
+                    filename = argv[i+1];
+                    i++;
+                }
+                else {
+                    invalidArgs = true;
+                }
+            }
+            else {
+                // There are no other options I recognize at the moment.
+                invalidArgs = true;
+            }
+        }
+        else {
+            // it's a command
+            parsing = false;
+            if(s.compare("add") == 0) {
+                command = ADD;
+            }
+            else if(s.compare("amend") == 0) {
+                command = AMEND;
+            }
+            else if(s.compare("demote") == 0) {
+                command = DEMOTE;
+            }
+            else if(s.compare("help") == 0) {
+                command = HELP;
+            }
+            else if(s.compare("list") == 0) {
+                command = LIST;
+            }
+            else if(s.compare("promote") == 0) {
+                command = PROMOTE;
+            }
+            else if(s.compare("remove") == 0) {
+                command = REMOVE;
+            }
+            else if(s.compare("swap") == 0) {
+                command = SWAP;
+            }
+            else {
+                invalidArgs = true;
+            }
+        }
+        
+    }
+
+    if(invalidArgs) {
+        displayHelp(cout);
+        exit(1);
+    }
+
+    // read in the file.
+    ifstream infile(filename);
+    // do the command
+    switch(command) {
+        case ADD:
+            cout << "add task" << endl;
+            break;
+        case AMEND:
+            cout << "amend" << endl;
+            break;
+        case DEMOTE:
+            cout << "demote" << endl;
+            break;
+        case HELP:
+            cout << "help" << endl;
+            break;
+        case LIST:
+            cout << "list" << endl;
+            break;
+        case PROMOTE:
+            cout << "promote" << endl;
+            break;
+        case REMOVE:
+            cout << "remove" << endl;
+            break;
+        case SWAP:
+            cout << "Swap" << endl;
+            break;
+        default:
+            displayHelp(cout);
+            exit(1);
+            break;
+    }
+    
+    return 0;
+}
 
 /*
  * displayHelp
@@ -16,170 +129,17 @@ enum command {AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
  *      os - The output stream being displayed to.
  * return: None.
  */
-void displayHelp(ostream& os);
-
-/*
- * listAllTasks
- * class: None
- * description: Lists all the tasks by order of priority. The output stream is
- *              modified. The Manager is unchanged.
- * parameters:
- *      os - The output stream being written to.
- * return: None
- */
-void listAllTasks(ostream &os, const Manager &m);
-
-/*
- * listTask
- * class: None
- * description: Lists an arbitrary task. The output stream is modified. The
- *              manager is unchanged.
- * parameters:
- *      os - The output stream being written to.
- *      ndx - The index of the task being listed.
- */
-void listTask(ostream& os,const Manager &m, int ndx);
-
-/*
- * listSequence
- * class: None
- * description: List a sequence of tasks begining from the start priority to
- *              end priority. The output stream is modified, but the Manager is
- *              unchanged.
- * paramaters:
- *          os - The output stream
- *          m - The manager of tasks.
- *          start - The begining index of the tasks being listed.
- *          end - The end index of the tasks being listed.
- * return: None.
- */
-void listSequence(ostream& os,const Manager &m, int start, int end);
-
-/*
- * amendTask
- * class: None
- * description: Modifies a given task held in the manager. The manager is
- *              modified, but the Task is not.
- * paramaters:
- *      m - The manager.
- *      ndx - The index of the task being modified.
- *      t - The new Task.
- * return: Whether the amendment was successful.
- */
-bool amendTask(Manager *m,int ndx,const Task &t);
-
-/*
- * amendTaskItem
- * class: None
- * description: Amends a specific item in a specific task. The manager and the
- *              task held in the manager is modified.
- * paramaters:
- *      m - The manager.
- *      task - The index of the task being modified.
- *      item - The index of the item being modified.
- *      s - The new string value for the item.
- * return: Whether the amendment was successful.
- */
-bool amendTaskItem(Manager *m, int task, int item, string s);
-
-/*
- * createTask
- * class: None
- * description: Adds a task to the manager.
- * paramaters:
- *      m - The manager.
- *      t - The task being added to the manager.
- * return: Whether the addition was successful.
- */
-bool createTask(Manager *m, const Task &t);
-
-/*
- * removeTask
- * class: None
- * description: Removes a given task from the manager. The manager is modified.
- * paramaters:
- *      m - The manager.
- *      ndx - The index of the task being removed.
- * return: Whether the removal was successful.
- */
-bool removeTask(Manager *m, int ndx);
-
-/*
- * removeTaskItem
- * class: None
- * description: Removes an item from a task. The task held in the manager is
- *              modified.
- * paramaters:
- *      m - The manager.
- *      task - The index of the task.
- *      item - The index of the item.
- * return: Whether the item removal was successful.
- */
-bool removeTaskItem(Manager *m,int task, int item);
-
-/*
- * amendTaskPriority
- * class: None
- * description: Changes a task priority.
- * paramaters:
- *      m - The manager.
- *      task - The index of the task being amended.
- *      mod - The amount the priority is modified by.
- * return: Whether the promotion or demotion is successful.
- */
-bool amendTaskPriority(Manager *m, int task, int mod);
-
-/*
- * amendTaskItemPriority
- * class: None
- * description: Changes an item from a task priority. The task held in the
- *              manager is modified.
- * paramaters:
- *      m - The manager.
- *      task - The index of the task.
- *      item - The index of the item in the task being modified.
- *      mod - The number of spots it's being promoted or demoted.
- * return: Whether the promotion or demotion was successful.
- */
-bool amendTaskItemPriority(Manager *m, int task, int item, int mod);
-
-/*
- * main
- * class: None
- */
-int main(int argc, char** argv) {
-    // handle the arguments
-    Manager m;
-    if(argc < 2) {
-        displayHelp(cout);
-        //return 1;
-    }
-    for(int i = 1; i < argc; ++i) {
-        cout << argv[i] << endl;
-    }
-    listAllTasks(cout,m);
-
-    cout << LIST << endl;
-
-
-
-    // Test the output operator for task
-    return 0;
-}
-
 void displayHelp(ostream & os) {
-    os << "usage: todo-manager <command> [<args>]" << endl;
+    os << "usage: todo-manager [-f <filename>] [<command> [<args>]]" << endl;
     os << "The commands are: " << endl;
     os << "    amend [n <command> [<args>]]" << endl; 
+    os << "    demote [n count]       Demotes the nth task count times." << endl;
     os << "    help                   Display this message." << endl;
     os << "    list [n][n m]          List all the tasks and their item, or  " << endl;
     os << "                           a task or display a range of tasks." << endl;
+    os << "    promote [n count]      Promotes the nth task count times." << endl;
     os << "    remove [n]             Removes task n from the list."<< endl;
     os << "    swap [n m]             swaps the priority of task n and task m." << endl;
     os << "" << endl;
     os << "type todo-manager help <command> for more infromation on that command. " << endl;
-}
-
-void listAllTasks(ostream &os, const Manager &m) {
-    os << m;
 }
