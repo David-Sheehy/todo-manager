@@ -172,7 +172,22 @@ int main(int argc, char **argv) {
             }
             break;
         case PROMOTE:
-            cout << "promote" << endl;
+            if(ac != 2) {
+                // display the help
+                cout << "Wrong number of arguments given." << endl;
+                exit(1);
+            }
+
+            if(!isNumeric(argv[comInd+1]) && !isNumeric(argv[comInd+2])) {
+                cout << "Non-numeric argument given." << endl;
+                exit(1);
+            }
+            x = atoi(argv[comInd+1]);
+            y = atoi(argv[comInd+2]);
+            m.promote(x,y);
+            fout.open(filename.c_str());
+            m.write(fout);
+            fout.close();
             break;
         case REMOVE:
             if(ac < 1) {
@@ -209,7 +224,6 @@ int main(int argc, char **argv) {
                 cout << "Non-numeric argument given." << endl;
                 exit(1);
             }
-
             break;
         default:
             displayHelp(cout);
