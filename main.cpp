@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     bool parsing = true;
     int command = -1;               // The switch code for command
     int comInd = -1;                // The index of the command in argv
-    int lc = -1;                    // number of arguments for a command
+    int ac = -1;                    // number of arguments for a command
     int x = -1, y = -1;             // Hold argument values.
     ifstream fin;                   // The input filestream
     ofstream fout;                  // The output filestream.
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
             // it's a command
             parsing = false;
             comInd = i;
-            lc = (argc - comInd - 1);
+            ac = (argc - comInd - 1);
             if(s.compare("add") == 0) {
                 command = ADD;
             }
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
     // do the command
     switch(command) {
         case ADD:
-            if(0 < lc) {
+            if(0 < ac) {
                 Task t;
                 t.setTitle(argv[comInd+1]);
                 for(int i = comInd+2; i < argc; ++i) {
@@ -123,14 +123,14 @@ int main(int argc, char **argv) {
             cout << "demote" << endl;
             break;
         case HELP:
-            cout << "help" << endl;
+            displayHelp(cout);
             break;
         case LIST:
             // there are several options for this.
             // If there is no arguments past the command, it will list
             // everything. If there is one it will only list that one. If there
             // are two it will list an inclusive range.
-            switch(lc) {
+            switch(ac) {
                 case 0:
                     cout << m;
                     break;
@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
                         x = atoi(argv[comInd+1]);
                         y = atoi(argv[comInd+2]);
                         if(0 <= x && x < y) {
-                        for(int i = x; i <= y && i < m.getNumberOfTasks(); ++i) {
+                        for(int i = x; i <= y && i < m.getNumberOfTasks(); ++i){
                             cout << "(" << i << ")" << m.getTask(i) << endl;
                         }
                         }
@@ -175,7 +175,17 @@ int main(int argc, char **argv) {
             cout << "promote" << endl;
             break;
         case REMOVE:
-            cout << "remove" << endl;
+            if(ac < 1) {
+                cout << "Not enough arguments given." << endl;
+                exit(1);
+            }
+            if(isNumeric(argv[comInd+1])) {
+                x = atoi(argv[comInd+1]);
+                m.removeTask(x);
+                fout.open(filename.c_str());
+                m.write(fout);
+                fout.close();
+            }
             break;
         case SWAP:
             cout << "Swap" << endl;

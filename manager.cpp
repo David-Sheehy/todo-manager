@@ -39,16 +39,37 @@ void Manager::addTask(Task t) {
 /*
  * getTask
  * class: Manager
+ * description: Retrieve a task held in the list.
  * parameters:
- *      ndx - The ndx of the task being retrieved.
+ *      ndx - The index of the task being retrieved.
  * return: A copy of the task held at ndx or an empty task if that task does
  *         not exist.
  */
 Task Manager::getTask(int ndx) const {
-    if(ndx < 0 || n < ndx) {
+    if(ndx < 0 || n <= ndx) {
         return Task();
     }
     return tasks[ndx];
+}
+
+/*
+ * removeTask
+ * class: Manager
+ * description: Remove a task from the list and promote the tasks below it.
+ * parameters:
+ *      ndx - The index of the task being removed.
+ * return: None.
+ */
+void Manager::removeTask(int ndx) {
+    if(ndx < 0 || n <= ndx) {
+        // do nothing
+        return;
+    }
+    // lazy removal, so really just promote the tasks under it.
+    for(int i = ndx+1; i < n; ++i) {
+        this->promote(i,1);
+    }
+    n--;
 }
 
 /*
