@@ -16,10 +16,10 @@ bool isNumeric(const char*);
  * class: None
  */
 int main(int argc, char **argv) {
-    Manager m;
+    Manager m;                      // The todo list manager.
     string filename = "~/todo.txt"; // default file
     bool invalidArgs = argc < 2;
-    bool parsing = true;
+    bool parsing = true;            // Whether it's still parsing argument
     int command = -1;               // The switch code for command
     int comInd = -1;                // The index of the command in argv
     int ac = -1;                    // number of arguments for a command
@@ -120,7 +120,22 @@ int main(int argc, char **argv) {
             cout << "amend" << endl;
             break;
         case DEMOTE:
-            cout << "demote" << endl;
+            if(ac != 2) {
+                cout << "Invalid number of arguments." << endl;
+                exit(1);
+            }
+
+            if(!isNumeric(argv[comInd+1]) && !isNumeric(argv[comInd+2])) {
+                cout << "Non-numeric argument given." << endl;
+                exit(1);
+            }
+
+            x = atoi(argv[comInd+1]);
+            y = atoi(argv[comInd+2]);
+            m.demote(x,y);
+            fout.open(filename.c_str());
+            m.write(fout);
+            fout.close();
             break;
         case HELP:
             displayHelp(cout);
@@ -182,6 +197,7 @@ int main(int argc, char **argv) {
                 cout << "Non-numeric argument given." << endl;
                 exit(1);
             }
+
             x = atoi(argv[comInd+1]);
             y = atoi(argv[comInd+2]);
             m.promote(x,y);
@@ -194,17 +210,16 @@ int main(int argc, char **argv) {
                 cout << "Not enough arguments given." << endl;
                 exit(1);
             }
-            if(isNumeric(argv[comInd+1])) {
-                x = atoi(argv[comInd+1]);
-                m.removeTask(x);
-                fout.open(filename.c_str());
-                m.write(fout);
-                fout.close();
-            }
-            else {
+            if(!isNumeric(argv[comInd+1])) {
                 cout << "Non-numeric argument given." << endl;
                 exit(1);
             }
+
+            x = atoi(argv[comInd+1]);
+            m.removeTask(x);
+            fout.open(filename.c_str());
+            m.write(fout);
+            fout.close();
             break;
         case SWAP:
             if(ac != 2) {
@@ -212,18 +227,17 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            if(isNumeric(argv[comInd+1]) && isNumeric(argv[comInd+2])) {
-                x = atoi(argv[comInd+1]);
-                y = atoi(argv[comInd+2]);
-                m.swapTasks(x,y);
-                fout.open(filename.c_str());
-                m.write(fout);
-                fout.close();
-            }
-            else {
+            if(!isNumeric(argv[comInd+1]) && !isNumeric(argv[comInd+2])) {
                 cout << "Non-numeric argument given." << endl;
                 exit(1);
             }
+
+            x = atoi(argv[comInd+1]);
+            y = atoi(argv[comInd+2]);
+            m.swapTasks(x,y);
+            fout.open(filename.c_str());
+            m.write(fout);
+            fout.close();
             break;
         default:
             displayHelp(cout);

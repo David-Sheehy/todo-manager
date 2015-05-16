@@ -147,7 +147,7 @@ void Manager::demote(int ndx, int number) {
     }
     Task temp = getTask(ndx+number);
     setTask(getTask(ndx),number+ndx);
-    for(int i = ndx+number; ndx <= i; --i) {
+    for(int i = ndx+number-1; ndx <= i; --i) {
         Task t = getTask(i);
         setTask(temp,i);
         temp = t;
