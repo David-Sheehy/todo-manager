@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 #include <string>
 #include <string.h>
 #include "manager.h"
@@ -17,7 +18,8 @@ bool isNumeric(const char*);
  */
 int main(int argc, char **argv) {
     Manager m;                      // The todo list manager.
-    string filename = "~/todo.txt"; // default file
+    string homedir = getenv("HOME");
+    string filename = homedir+"/todo.txt"; // default file
     bool invalidArgs = argc < 2;
     bool parsing = true;            // Whether it's still parsing argument
     int command = -1;               // The switch code for command
