@@ -7,7 +7,7 @@
 #include "task.h"
 
 using namespace std;
-enum command {ADD,AMEND,DEMOTE,HELP,LIST,PROMOTE,REMOVE,SWAP};
+enum command {ADD,AMEND,DEMOTE,HELP,LIST,MODIFY,PROMOTE,REMOVE,RENAME,SWAP};
 void displayHelp(ostream& os);
 bool isNumeric(const char*);
 
@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
     bool invalidArgs = argc < 2;
     bool parsing = true;            // Whether it's still parsing argument
     int command = -1;               // The switch code for command
+    int subCom = -1;                // The switch code for sub commands.
     int comInd = -1;                // The index of the command in argv
     int ac = -1;                    // number of arguments for a command
     int x = -1, y = -1;             // Hold argument values.
@@ -117,7 +118,57 @@ int main(int argc, char **argv) {
             }
             break;
         case AMEND:
-            cout << "amend" << endl;
+            if(ac < 3) {
+                cout << "Not enough arguments given." << endl;
+                exit(1);
+            }
+
+            if(!isNumeric(argv[comInd+1])) {
+                cout << "Non-numeric value given for the task number." << endl;
+                exit(1);
+            }
+            x = atoi(argv[comInd+1]);
+
+            // determine what changes is actually going to be made.
+            // add item, remove item, change item, change title.
+            if(strcmp(argv[comInd+2],"add") == 0 ) {
+                for(int i = comInd+3; i < argc; ++i) {
+                    m.addItem(x,argv[i]);
+                }
+            }
+            else if(strcmp(argv[comInd+2],"remove")==0) {
+                if(!isNumeric(argv[comInd+3])) {
+                    cout << "Non-numeric value given for the item." << endl;
+                    exit(1);
+                }
+                m.removeItem(x,atoi(argv[comInd+3]));
+            }
+            else if(strcmp(argv[comInd+2],"mod")==0) {
+                if(!isNumeric(argv[comInd+3])) {
+                    cout << "Non-numeric value given for item index." << endl;
+                    exit(1);
+                }
+                if(ac < 4) {
+                    cout << "Not enough arguments given." << endl;
+                    exit(1);
+                }
+                y = atoi(argv[comInd+3]);
+                if(!m.setItem(x,y,argv[comInd+4])) {
+                    cout << "An error occured." << endl;
+                    exit(1);
+                }
+            }
+            else if(strcmp(argv[comInd+2],"rename")==0) {
+                if(!m.setTitle(x,argv[comInd+3])) {
+                    cout << "An error has occured." << endl;
+                    exit(1);
+                }
+            }
+            
+            fout.open(filename.c_str());
+            m.write(fout);
+            fout.close();
+
             break;
         case DEMOTE:
             if(ac != 2) {

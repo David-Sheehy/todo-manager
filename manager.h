@@ -45,6 +45,7 @@ class Manager {
         bool removeItem(int task, int item);
         bool setItem(int task, int item, std::string s);
         bool addItem(int task, std::string item);
+        bool setTitle(int task, std::string title);
 
         void read(std::istream&);
         void write(std::ostream&);

@@ -200,6 +200,22 @@ bool Manager::setItem(int task, int item, std::string s) {
 }
 
 /*
+ * setTitle
+ * class: Manager
+ * description: Changes a given task's title.
+ * parameters:
+ *      ndx - The index of the task being modified.
+ *      title - The title 
+ */
+bool Manager::setTitle(int task, std::string title) {
+    if(task < 0 || n < task) {
+        return false;
+    }
+    this->tasks[task].setTitle(title);
+    return true;
+}
+
+/*
  * addItem
  * class: Manager
  * description: Adds an item to a selected task.
