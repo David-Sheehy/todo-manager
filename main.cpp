@@ -8,7 +8,7 @@
 #include "task.h"
 
 using namespace std;
-enum command {ADD,AMEND,DEMOTE,HELP,LIST,MODIFY,PROMOTE,REMOVE,RENAME,SWAP};
+enum command {ADD,AMEND,DEMOTE,HELP,LIST,MODIFY,PROMOTE,REMOVE,RENAME,SWAP,TOP};
 void displayHelp(ostream& os);
 bool isNumeric(const char*);
 
@@ -82,6 +82,9 @@ int main(int argc, char **argv) {
             }
             else if(s.compare("swap") == 0) {
                 command = SWAP;
+            }
+            else if(s.compare("top") == 0) {
+                command = TOP;
             }
             else {
                 invalidArgs = true;
@@ -291,6 +294,23 @@ int main(int argc, char **argv) {
             fout.open(filename.c_str());
             m.write(fout);
             fout.close();
+            break;
+        case TOP:
+            if(ac == 0) {
+                // display the top task
+                cout << "(0) " << m.getTask(0) << endl;
+            }
+            else {
+                // display the top n tasks
+                if(!isNumeric(argv[comInd+1])) {
+                    cout << "Non-numeric argument given." << endl;
+                    exit(1);
+                }
+                x = atoi(argv[comInd+1]);
+                for(int i = 0; i < x; ++i) {
+                    cout << "(" << i << ") " << m.getTask(i) << endl;
+                }
+            }
             break;
         default:
             displayHelp(cout);
