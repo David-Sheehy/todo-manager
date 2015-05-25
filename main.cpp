@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
     int subCom = -1;                // The switch code for sub commands.
     int comInd = -1;                // The index of the command in argv
     int ac = -1;                    // number of arguments for a command
+    int task = -1;                  // The task number being amended.
     int x = -1, y = -1;             // Hold argument values.
     ifstream fin;                   // The input filestream
     ofstream fout;                  // The output filestream.
@@ -123,6 +124,7 @@ int main(int argc, char **argv) {
             }
             break;
         case AMEND:
+
             if(ac < 3) {
                 cout << "Not enough arguments given." << endl;
                 exit(1);
@@ -132,21 +134,14 @@ int main(int argc, char **argv) {
                 cout << "Non-numeric value given for the task number." << endl;
                 exit(1);
             }
-            x = atoi(argv[comInd+1]);
+            task = atoi(argv[comInd+1]);
 
             // determine what changes is actually going to be made.
             // add item, remove item, change item, change title.
             if(strcmp(argv[comInd+2],"add") == 0 ) {
                 for(int i = comInd+3; i < argc; ++i) {
-                    m.addItem(x,argv[i]);
+                    m.addItem(task,argv[i]);
                 }
-            }
-            else if(strcmp(argv[comInd+2],"remove")==0) {
-                if(!isNumeric(argv[comInd+3])) {
-                    cout << "Non-numeric value given for the item." << endl;
-                    exit(1);
-                }
-                m.removeItem(x,atoi(argv[comInd+3]));
             }
             else if(strcmp(argv[comInd+2],"mod")==0) {
                 if(!isNumeric(argv[comInd+3])) {
@@ -158,13 +153,51 @@ int main(int argc, char **argv) {
                     exit(1);
                 }
                 y = atoi(argv[comInd+3]);
-                if(!m.setItem(x,y,argv[comInd+4])) {
+                if(!m.setItem(task,y,argv[comInd+4])) {
                     cout << "An error occured." << endl;
                     exit(1);
                 }
             }
+            else if(strcmp(argv[comInd+2],"promote")==0) {
+                // Attempt to promote a subitem
+                if(ac < 4) {
+                    cout << "Not enough arguments given to promote item.\n";
+                }
+
+                // check that the two arguments given are numeric
+                if(!isNumeric(argv[comInd+3]) || !isNumeric(argv[comInd+4])) {
+                    cout << "Non-numeric arguments given for promotion.\n";
+                }
+
+                x = atoi(argv[comInd+3]);
+                y = atoi(argv[comInd+4]);
+                m.promoteItem(task,x,y);
+            }
+            else if(strcmp(argv[comInd+2],"demote")==0) {
+                // Attempt to demote a subitem
+                if(ac < 4) {
+                    cout << "Not enough arguments given to demote item.\n";
+                }
+
+                // check that the two arguments given are numeric
+                if(!isNumeric(argv[comInd+3]) || !isNumeric(argv[comInd+4])) {
+                    cout << "Non-numeric arguments given for demotion.\n";
+                }
+
+                x = atoi(argv[comInd+3]);
+                y = atoi(argv[comInd+4]);
+                m.demoteItem(task,x,y);
+            }
+            else if(strcmp(argv[comInd+2],"remove")==0) {
+                if(!isNumeric(argv[comInd+3])) {
+                    cout << "Non-numeric value given for the item." << endl;
+                    exit(1);
+                }
+                m.removeItem(task,atoi(argv[comInd+3]));
+            }
             else if(strcmp(argv[comInd+2],"rename")==0) {
-                if(!m.setTitle(x,argv[comInd+3])) {
+                // Attempt to set the title
+                if(!m.setTitle(task,argv[comInd+3])) {
                     cout << "An error has occured." << endl;
                     exit(1);
                 }
@@ -175,6 +208,7 @@ int main(int argc, char **argv) {
             fout.close();
 
             break;
+
         case DEMOTE:
             if(ac != 2) {
                 cout << "Invalid number of arguments." << endl;
@@ -194,9 +228,13 @@ int main(int argc, char **argv) {
             fout.close();
             break;
         case HELP:
+            // Display a simple help message
+            // Eventually this should parse argument passed to display
+            // information about as specific command.
             displayHelp(cout);
             break;
         case LIST:
+
             // there are several options for this.
             // If there is no arguments past the command, it will list
             // everything. If there is one it will only list that one. If there
@@ -242,7 +280,9 @@ int main(int argc, char **argv) {
                     break;
             }
             break;
+
         case PROMOTE:
+
             if(ac != 2) {
                 // display the help
                 cout << "Wrong number of arguments given." << endl;
@@ -262,6 +302,8 @@ int main(int argc, char **argv) {
             fout.close();
             break;
         case REMOVE:
+
+            // Remove the nth task.
             if(ac < 1) {
                 cout << "Not enough arguments given." << endl;
                 exit(1);
@@ -278,6 +320,8 @@ int main(int argc, char **argv) {
             fout.close();
             break;
         case SWAP:
+
+            // Swap the priorty/position of two tasks.
             if(ac != 2) {
                 cout << "Wrong number of arguments given." << endl;
                 exit(1);
@@ -295,7 +339,10 @@ int main(int argc, char **argv) {
             m.write(fout);
             fout.close();
             break;
+
         case TOP:
+
+            // Display the top (n) tasks.
             if(ac == 0) {
                 // display the top task
                 cout << "(0) " << m.getTask(0) << endl;
@@ -353,6 +400,11 @@ void displayHelp(ostream & os) {
     os << "The commands are: " << endl;
     os << "    add   [ <task. [<items>]]" << endl;
     os << "    amend [n <command> [<args>]]" << endl; 
+    os << "                           Amends the nth task in a certain way." << endl;
+    os << "                                 add: Adds an item to the task." << endl;
+    os << "                                 remove: Removes an item." << endl;
+    os << "                                 mod: Modifies a given item." << endl;
+    os << "                                 promote: Promotes a given item." << endl;
     os << "    demote [n count]       Demotes the nth task count times." << endl;
     os << "    help                   Display this message." << endl;
     os << "    list [][n][n m]        List all the tasks and their items, or  " << endl;
@@ -360,5 +412,6 @@ void displayHelp(ostream & os) {
     os << "    promote [n count]      Promotes the nth task count times." << endl;
     os << "    remove [n]             Removes task n from the list."<< endl;
     os << "    swap [n m]             swaps the priority of task n and task m." << endl;
+    os << "    top [n]                Displays the first n tasks in the list." << endl;
     os << "" << endl;
 }

@@ -42,9 +42,11 @@ class Manager {
 
         // arbitrary task modifying functions
         // These  modify a specified task stored by the manager.
+        bool addItem(int task, std::string item);
+        bool demoteItem(int task, int item, int places);
+        bool promoteItem(int task,int item,  int places);
         bool removeItem(int task, int item);
         bool setItem(int task, int item, std::string s);
-        bool addItem(int task, std::string item);
         bool setTitle(int task, std::string title);
 
         void read(std::istream&);

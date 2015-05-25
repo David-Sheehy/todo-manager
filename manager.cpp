@@ -285,3 +285,11 @@ void Manager::read(std::istream &is) {
         this->addTask(temp);
     }
 }
+
+bool Manager::promoteItem(int task, int item, int places) {
+    return (0 <= task && task < n &&  tasks[task].promoteItem(item,places));
+}
+
+bool Manager::demoteItem(int task, int item, int places) {
+    return (0 <= task && task < n &&  tasks[task].demoteItem(item,places));
+}

@@ -12,6 +12,7 @@ class Task {
         int len;
 
         void expand(); 
+        void swapItem(int x, int y);
     public:
 
         ~Task() {
@@ -65,6 +66,9 @@ class Task {
         std::string getTitle() const {
             return title;
         }
+
+        bool promoteItem(int ndx, int places);
+        bool demoteItem(int ndx, int places);
 
         void read(std::istream&);
         void write(std::ostream&) const;

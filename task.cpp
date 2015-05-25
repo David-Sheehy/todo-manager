@@ -102,7 +102,7 @@ bool Task::removeItem(int priority) {
 
 
 /*
- * setIteem
+ * setItem
  * class: Task
  * description: Modifies a given subtask.
  * Parameters:
@@ -180,4 +180,54 @@ void Task::read(std::istream &is) {
         is.getline(line,LINE_SIZE);
         this->addItem(line);
     }
+}
+
+/*
+ * swapItem
+ * class: Task
+ * description: Swaps the priorities of item[x] and item[y]
+ * parameters:
+ *      x - The index of an item.
+ *      y - The index of the other item.
+ */
+void Task::swapItem(int x, int y) {
+    std::string temp = this->items[x];
+    this->items[x] = this->items[y];
+    this->items[y] = temp;
+}
+
+/*
+ * promoteItem
+ * class: Task
+ * description: Attempts to promote an item by a number.
+ * parameters:
+ *      ndx - The index of the item being promotoed.
+ *      places - The amount of places being moved up.
+ */
+bool Task::promoteItem(int ndx, int places) {
+    bool result = (0<=ndx) && (ndx < n) && (0 <= (ndx - places));
+    if(result) {
+        for(int i = 1; i <= places; ++i) {
+            swapItem(ndx-i,ndx-i+1);
+        }
+    }
+    return result;
+}
+
+/*
+ * demoteItem
+ * class: Task
+ * description: Attempts to promote an item by a number.
+ * parameters:
+ *      ndx - The index of the item being promotoed.
+ *      places - The amount of places being moved up.
+ */
+bool Task::demoteItem(int ndx, int places) {
+    bool result = (0<=ndx) && (ndx < n) && ((ndx + places) < n);
+    if(result) {
+        for(int i = 1; i <= places; ++i) {
+            swapItem(ndx+i,ndx+i-1);
+        }
+    }
+    return result;
 }
