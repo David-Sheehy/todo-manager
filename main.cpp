@@ -283,7 +283,7 @@ int main(int argc, char **argv) {
 
         case PROMOTE:
 
-            if(ac != 2) {
+            if(ac < 1) {
                 // display the help
                 cout << "Wrong number of arguments given." << endl;
                 exit(1);
@@ -294,8 +294,14 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            x = atoi(argv[comInd+1]);
-            y = atoi(argv[comInd+2]);
+            x = atoi(argv[comInd+1]); // The item being promoted
+
+            if( ac == 1) {
+                y = 1;  // promote the item by only one
+            }
+            else {
+                y = atoi(argv[comInd+2]);
+            }
             m.promote(x,y);
             fout.open(filename.c_str());
             m.write(fout);
